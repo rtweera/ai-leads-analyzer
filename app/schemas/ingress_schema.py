@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, EmailStr
-from typing import List, Optional
+from pydantic import BaseModel, Field, EmailStr, Json
+from typing import List, Optional, Any
 
 class EmailInfo(BaseModel):
     subject: str
@@ -8,7 +8,7 @@ class EmailInfo(BaseModel):
     cc: List[EmailStr]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "subject": "NEW LEAD from: Bonjour | Alfonso | API Management Contact Us",
                 "from": "example@example.com",
@@ -33,7 +33,7 @@ class LeadInfo(BaseModel):
     canHelpComment: str
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "firstName": "John",
                 "lastName": "Doe",
@@ -54,11 +54,23 @@ class LeadInfo(BaseModel):
 class LeadPayload(BaseModel):
     emailInfo: EmailInfo
     leadInfo: LeadInfo
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "emailInfo": EmailInfo.Config.json_schema_extra["example"],
+                "leadInfo": LeadInfo.Config.json_schema_extra["example"]
+            }
+        }
+
+
+class IngressPayload(BaseModel):
+    lead: LeadPayload
+    geranimo: Json[Any]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
-                "emailInfo": EmailInfo.Config.schema_extra["example"],
-                "leadInfo": LeadInfo.Config.schema_extra["example"]
+                "lead": LeadPayload.Config.json_schema_extra["example"],
+                "geranimo": "IDK the format yet 🤷‍♀️"
             }
         }
