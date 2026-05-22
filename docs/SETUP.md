@@ -156,10 +156,14 @@ psql -U user -d ai_leads_db -h localhost
 
 ### Port Already in Use
 
-If port 8000 is in use, specify a different port:
+If port 8000 is in use, modify the port in the main.py execution or use uvicorn directly:
 
 ```bash
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8001
+# Using Poetry
+poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001
+
+# Or modify the hardcoded port in app/main.py and use:
+poetry run python app/main.py
 ```
 
 ## Next Steps
